@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react"
 
+// Accept fetchFunction as Parameter
+// Promise will be of a Generic Type <T>
 const useFetch = <T>(fetchFunction: () => Promise<T>, autoFetch = true) => {
+    // Defining some states that could be null too
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
 
     const fetchData = async() => {
         try {
-            setLoading(true);
+            setLoading(true);   // start the loading action
             setError(null);
 
             const result = await fetchFunction();
@@ -16,7 +19,9 @@ const useFetch = <T>(fetchFunction: () => Promise<T>, autoFetch = true) => {
         } catch (err) {
             // @ts-ignore
             setError(err instanceof Error ? err: new Error('An error occured'));
-        } finally {
+        } 
+        // Executes when either a Try succeeds or Catch finishes
+        finally {
             setLoading(false);
         }
     }
