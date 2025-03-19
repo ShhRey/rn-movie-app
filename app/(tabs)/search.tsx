@@ -14,16 +14,17 @@ const Search = () => {
 
 	// Load Movies as per searchQuery from the User
 	useEffect(() => {
-		const func = async () => {
+		// Debouncing Concept
+		const timeoutId = setTimeout(async () => {
 			if (searchQuery.trim()) {
 				await loadMovies();
 			}
 			else {
 				reset();
 			}
-		}
-
-		func();
+		}, 1000);
+		
+		return () => clearTimeout(timeoutId);
 	}, [searchQuery]);
 
 	return (
