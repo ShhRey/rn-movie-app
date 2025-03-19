@@ -10,11 +10,11 @@ import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from "reac
 export default function Index() {
 	const router = useRouter();
 
-	const {  data:movies, loading: moviesLoading, error: moviesError } = useFetch(() => fetchMovies({ query: 'iron man' }))
+	const {  data:movies, loading: moviesLoading, error: moviesError } = useFetch(() => fetchMovies({ query: '' }));
 
 	return (
 		<View className='flex-1 bg-primary'>
-			<Image className="absolute w-full z-0" source={images.bg} />
+			<Image className="absolute w-full z-0" source={images.bg} resizeMode="cover" />
 			{/* Wrap vertical content that might not fit in Screen */}
 			<ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false} contentContainerStyle={{ minHeight: "100%", paddingBottom: 10 }}>
 				<Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
@@ -32,6 +32,7 @@ export default function Index() {
 									<Text className="text-lg text-white font-bold mt-5 mb-3">Latest Movies</Text>
 									
 									<FlatList 
+										className="mt-2 pb-30"
 										data={movies}
 										renderItem={({ item }) => <MovieCard {...item} />}
 										keyExtractor={(item) => item.id.toString()}
@@ -42,7 +43,6 @@ export default function Index() {
 											paddingRight: 5,
 											marginBottom: 10
 										}}
-										className="mt-2 pb-30"
 										scrollEnabled={false}
 									/>
 								</>
