@@ -1,5 +1,5 @@
 import { View, Text, Image, FlatList, ActivityIndicator } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { images } from '@/constants/images'
 import MovieCard from '@/components/MovieCard'
 import useFetch from '@/services/useFetch'
@@ -10,15 +10,29 @@ import SearchBar from '@/components/SearchBar'
 const Search = () => {
 	const [searchQuery, setSearchQuery] = useState('');
 
-	const { data:movies, loading, error } = useFetch(() => fetchMovies({ query: searchQuery }));
+	const { data: movies, refetch: loadMovies, reset, loading, error } = useFetch(() => fetchMovies({ query: searchQuery }), false);
+
+	// Load Movies as per searchQuery from the User
+	useEffect(() => {
+		const func = async () => {
+			if (searchQuery.trim()) {
+				await loadMovies();
+			}
+			else {
+				reset();
+			}
+		}
+
+		func();
+	}, [searchQuery]);
 
 	return (
 		<View className='flex-1 bg-primary'>
 			<Image source={images.bg} className='flex-1 absolute w-full z-0' resizeMode='cover' />
-			<FlatList 
+			<FlatList
 				className='px-5'
-				data={movies} 
-				renderItem={({ item }) => <MovieCard {...item} />} 
+				data={movies}
+				renderItem={({ item }) => <MovieCard {...item} />}
 				keyExtractor={(item) => item.id.toString()}
 				numColumns={3}
 				columnWrapperStyle={{
@@ -34,7 +48,7 @@ const Search = () => {
 						</View>
 
 						<View className='my-5'>
-							<SearchBar 
+							<SearchBar
 								placeholder='Search for a Movie'
 								value={searchQuery}
 								onChangeText={(text: string) => setSearchQuery(text)}
@@ -44,7 +58,7 @@ const Search = () => {
 						{loading && (
 							<ActivityIndicator
 								size='large'
-								className='my-3' 
+								className='my-3'
 								color='#0000ff'
 							/>
 						)}
@@ -52,13 +66,13 @@ const Search = () => {
 						{error && (
 							<Text className='text-red-500 px-5 py-3' >Error: {error.message}</Text>
 						)}
-						
+
 						{!loading && !error && searchQuery.trim() && movies?.length > 0 && (
 							<Text className='text-xl text-white font-bold'>
 								Search results for{' '}
 								<Text className='text-accent'>{searchQuery}</Text>
 							</Text>
-							
+
 						)}
 					</>
 				}
