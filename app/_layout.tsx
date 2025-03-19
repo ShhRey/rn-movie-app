@@ -6,7 +6,7 @@ export default function RootLayout() {
 	return (
 		<>
 			{/* Hiding Time and Battery from Statusbar */}
-			{/* <StatusBar hidden={true} /> */}
+			<StatusBar hidden={true} />
 			<Stack>
 				{/* Hiding Default Header for Group Route */}
 				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
