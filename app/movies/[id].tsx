@@ -53,7 +53,7 @@ const MovieDetails = () => {
 						</View>
 						<View className="flex-row items-center mt-2">
 							<Text className="text-white text-sm">
-								Rated: {movie?.adult === false ? 'U' : 'A'}
+								Rated: {movie?.adult === false ? 'U' : movie?.adult === true ? 'A' : 'N/A'}
 							</Text>
 						</View>
 
